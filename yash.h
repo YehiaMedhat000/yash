@@ -13,8 +13,20 @@
 #define PS1 "yash> "
 #define ARGS_LIM 4096
 
+/* STRUCTURES */
+typedef struct builtins
+{
+	char *cmd;
+	int (*f)(int something_to_change_later);
+} builtin_t;
+
 /* PROTOTYPES */
-void parser(char *args[1024], char *prompt);
-void execute(char *args[1024]);
+void parser(char *args[ARGS_LIM], char *prompt);
+void execute(char *args[ARGS_LIM]);
+
+void cd(const char *new_dir);
+int is_builtin(const char *cmd);
+
+void terminate(const char *cmd);
 
 #endif /* _YASH_ */
