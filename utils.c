@@ -67,21 +67,33 @@ int is_builtin(const char *cmd)
 
 void cd(const char *new_dir)
 {
+	int check;
+
 	/* In case of going to home dir */
 	if (!new_dir || strcmp(new_dir, "~") == 0)
 	{
 		if (chdir(getenv("HOME")) == -1)
-			terminate("cd");
+			perror("cd");
 	}
 	else if (strcmp(new_dir, "-") == 0)
 	{
-		if (chdir(getenv("OLDPWD")) == -1)
-			terminate("cd");
+		if (chdir(getenv("PWD")) == -1)
+			perror("cd");
+		printf("%s\n", getenv("PWD"));
+	}
+	/* If the variable `~` is inserted */
+	else if (new_dir[0] == '~')
+	{
+		/* Getting the value of the `~` variable */
+		new_dir = strcat(getenv("HOME"), new_dir + 1);
+
+		if (chdir(new_dir) == -1)
+			perror("cd");
 	}
 	else
 	{
 		if (chdir(new_dir) == -1)
-			terminate("cd");
+			perror("cd");
 	}
 }
 
